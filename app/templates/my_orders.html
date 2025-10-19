@@ -25,11 +25,11 @@
     <td>
         <ul>
         {% for item in order.items %}
-            <li>{{ item.product.name }} x {{ item.quantity }} = ${{ "%.2f"|format(item.quantity * item.product.price) }}</li>
+            <li>{{ item.product.name }} x {{ item.quantity }} = ฿{{ "%.2f"|format(item.quantity * item.product.price) }}</li>
         {% endfor %}
         </ul>
     </td>
-    <td>${{ "%.2f"|format(order.total) }}</td>
+    <td>฿{{ "%.2f"|format(order.total) }}</td>
     <td>
         {% if order.status == 'Placed' %}
         <form method="POST" action="#" class="inline-form">

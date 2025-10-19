@@ -25,10 +25,10 @@
 {% if order and order.items %}
 <ul class="order-summary">
     {% for item in order.items %}
-    <li>{{ item.product.name }} x {{ item.quantity }} = ${{ "%.2f"|format(item.quantity * item.product.price) }}</li>
+    <li>{{ item.product.name }} x {{ item.quantity }} = ฿{{ "%.2f"|format(item.quantity * item.product.price) }}</li>
     {% endfor %}
 </ul>
-<p class="order-total"><strong>Total: ${{ "%.2f"|format(total) }}</strong></p>
+<p class="order-total"><strong>Total: ฿{{ "%.2f"|format(total) }}</strong></p>
 {% else %}
 <p class="empty-message">Your cart is empty.</p>
 {% endif %}

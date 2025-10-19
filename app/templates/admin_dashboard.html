@@ -32,7 +32,7 @@
     <tr>
         <td>{{ product.id }}</td>
         <td>{{ product.name }}</td>
-        <td>${{ "%.2f"|format(product.price) }}</td>
+        <td>฿{{ "%.2f"|format(product.price) }}</td>
         <td>
             <form method="POST" action="{{ url_for('main.delete_product', product_id=product.id) }}">
                 <button class="btn-gradient" type="submit">Delete</button>
@@ -65,11 +65,11 @@
         <td>
             <ul>
             {% for item in order.items %}
-                <li>{{ item.product.name }} x {{ item.quantity }} = ${{ "%.2f"|format(item.quantity * item.product.price) }}</li>
+                <li>{{ item.product.name }} x {{ item.quantity }} = ฿{{ "%.2f"|format(item.quantity * item.product.price) }}</li>
             {% endfor %}
             </ul>
         </td>
-        <td>${{ "%.2f"|format(order.total) }}</td>
+        <td>฿{{ "%.2f"|format(order.total) }}</td>
         <td>
             {% if order.status == 'Placed' %}
             <form method="POST" action="{{ url_for('main.update_order', order_id=order.id, status='Shipped') }}" style="display:inline;">
