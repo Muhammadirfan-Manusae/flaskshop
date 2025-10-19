@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h1>Admin Dashboard</h1>
+
+<h2>Users</h2>
+<table class="cart-table">
+    <tr><th>ID</th><th>Username</th><th>Email</th><th>Admin</th><th>Action</th></tr>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.is_admin }}</td>
+        <td>
+            <form method="POST" action="{{ url_for('main.toggle_admin', user_id=user.id) }}" style="display:inline;">
+                <button class="btn-gradient" type="submit">Toggle Admin</button>
+            </form>
+            <form method="POST" action="{{ url_for('main.delete_user', user_id=user.id) }}" style="display:inline;">
+                <button class="btn-gradient" type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2>Products</h2>
+<table class="cart-table">
+    <tr><th>ID</th><th>Name</th><th>Price</th><th>Action</th></tr>
+    {% for product in products %}
+    <tr>
+        <td>{{ product.id }}</td>
+        <td>{{ product.name }}</td>
+        <td>${{ "%.2f"|format(product.price) }}</td>
+        <td>
+            <form method="POST" action="{{ url_for('main.delete_product', product_id=product.id) }}">
+                <button class="btn-gradient" type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{{ url_for('main.add_product') }}" class="btn-gradient">Add New Product</a>
+
+<h2>Orders</h2>
+<table class="cart-table">
+    <tr>
+        <th>Order ID</th>
+        <th>User</th>
+        <th>Address</th>
+        <th>Phone</th>
+        <th>Status</th>
+        <th>Items</th>
+        <th>Total</th>
+        <th>Action</th>
+    </tr>
+    {% for order in orders %}
+    <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.customer.username }}</td>
+        <td>{{ order.address }}</td>
+        <td>{{ order.phone }}</td>
+        <td>{{ order.status }}</td>
+        <td>
+            <ul>
+            {% for item in order.items %}
+                <li>{{ item.product.name }} x {{ item.quantity }} = ${{ "%.2f"|format(item.quantity * item.product.price) }}</li>
+            {% endfor %}
+            </ul>
+        </td>
+        <td>${{ "%.2f"|format(order.total) }}</td>
+        <td>
+            {% if order.status == 'Placed' %}
+            <form method="POST" action="{{ url_for('main.update_order', order_id=order.id, status='Shipped') }}" style="display:inline;">
+                <button class="btn-gradient" type="submit">Mark Shipped</button>
+            </form>
+            <form method="POST" action="{{ url_for('main.update_order', order_id=order.id, status='Cancelled') }}" style="display:inline;">
+                <button class="btn-gradient" type="submit">Cancel</button>
+            </form>
+            {% endif %}
+            <!-- ปุ่ม Remove Order -->
+            <form method="POST" action="{{ url_for('main.remove_order', order_id=order.id) }}" style="display:inline;">
+                <button class="btn-gradient btn-red" type="submit">Remove Order</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

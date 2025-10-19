@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+<div class="cart-container">
+    <h1>Your Cart</h1>
+    {% if order and order.items %}
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in order.items %}
+        {% set subtotal = item.quantity * item.product.price %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>${{ "%.2f"|format(item.product.price) }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>${{ "%.2f"|format(subtotal) }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('main.remove_from_cart', item_id=item.id) }}" class="inline-form">
+                    <button class="btn-gradient">Remove</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+             <td colspan="3" style="text-align:right;"><strong>Total:</strong></td>
+             <td colspan="2"><strong>${{ "%.2f"|format(total) }}</strong></td>
+           </tr>
+         </tfoot>
+    </table>
+    <a href="{{ url_for('main.checkout') }}" class="btn-gradient">Proceed to Checkout</a>
+    {% else %}
+    <p class="empty-message">Your cart is empty.</p>
+    {% endif %}
+</div>
+{% endblock %}

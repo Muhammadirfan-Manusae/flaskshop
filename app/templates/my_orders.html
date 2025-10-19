@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+<div class="orders-container">
+    <h1>My Orders</h1>
+    {% if orders %}
+    <table class="orders-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+<tr>
+    <td>{{ order.id }}</td>
+    <td>{{ order.date_ordered.strftime('%Y-%m-%d %H:%M') }}</td>
+    <td>{{ order.status }}</td>
+    <td>
+        <ul>
+        {% for item in order.items %}
+            <li>{{ item.product.name }} x {{ item.quantity }} = ${{ "%.2f"|format(item.quantity * item.product.price) }}</li>
+        {% endfor %}
+        </ul>
+    </td>
+    <td>${{ "%.2f"|format(order.total) }}</td>
+    <td>
+        {% if order.status == 'Placed' %}
+        <form method="POST" action="#" class="inline-form">
+            <button class="btn-gradient">Cancel</button>
+        </form>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty-message">You have no orders.</p>
+    {% endif %}
+</div>
+{% endblock %}
