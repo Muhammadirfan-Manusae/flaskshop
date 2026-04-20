@@ -303,3 +303,7 @@ def remove_order(order_id):
     
     flash(f"Order #{order.id} has been removed.", "success")
     return redirect(url_for('main.admin_dashboard'))
+
+@main.route('/google182eb51858f50114.html')
+def google_verification():
+    return main.send_static_file('google182eb51858f50114.html')
