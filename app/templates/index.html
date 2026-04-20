@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Our Products</h1>
+
+{% if current_user.is_authenticated and current_user.is_admin %}
+    <a href="{{ url_for('main.add_product') }}" class="btn-gradient">Add New Product</a>
+{% endif %}
+
+<div class="products-grid">
+    {% for product in products %}
+    <div class="product-card">
+        <img src="{{ url_for('static', filename='images/' + (product.image_file or 'default_product.jpg')) }}" alt="{{ product.name }}">
+        <h3>{{ product.name }}</h3>
+        <p class="price">฿{{ "%.2f"|format(product.price) }}</p>
+        <a href="{{ url_for('main.product_detail', product_id=product.id) }}" class="btn-gradient">Details</a>
+
+        {% if current_user.is_authenticated and current_user.is_admin %}
+        <form method="POST" action="{{ url_for('main.delete_product', product_id=product.id) }}" style="margin-top: 5px;">
+            <button type="submit" class="btn-gradient">Delete</button>
+        </form>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

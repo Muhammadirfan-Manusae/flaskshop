@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Aromdee Cafe - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+ <nav class="navbar">
+    <div class="nav-container">
+        <!-- ซ้าย -->
+        <a href="{{ url_for('main.index') }}" class="logo">Aromdee Cafe</a>
+
+        <!-- ขวา -->
+        <ul class="nav-links">
+            {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('main.profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('main.cart') }}">Cart</a></li>
+                <li><a href="{{ url_for('main.my_orders') }}">My Orders</a></li>
+                {% if current_user.is_admin %}
+                    <li><a href="{{ url_for('main.admin_dashboard') }}" class="btn-gradient">Admin Dashboard</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('main.logout') }}">Logout</a></li>
+            {% else %}
+                <li><a href="{{ url_for('main.login') }}">Login</a></li>
+                <li><a href="{{ url_for('main.register') }}">Register</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+    <main class="container content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

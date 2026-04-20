@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="product-detail-container">
+    <!-- สองคอลัมน์ด้านบน -->
+    <div class="product-top">
+        <div class="product-image">
+            <img src="{{ url_for('static', filename='images/' + (product.image_file or 'default_product.jpg')) }}" alt="{{ product.name }}">
+        </div>
+        <div class="product-info">
+            <h1>{{ product.name }}</h1>
+            <p class="price">฿{{ "%.2f"|format(product.price) }}</p>
+            <p>{{ product.description }}</p>
+
+            {% if current_user.is_authenticated %}
+            <form method="POST" action="{{ url_for('main.add_to_cart', product_id=product.id) }}">
+                {{ cart_form.hidden_tag() }}
+                <label for="quantity">Quantity:</label>
+                {{ cart_form.quantity(class="input-quantity") }}
+                <button type="submit" class="btn-gradient">Add to Cart</button>
+            </form>
+            {% else %}
+            <p><a href="{{ url_for('main.login') }}">Login</a> to add to cart.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Comments Section ด้านล่างเต็มความกว้าง -->
+    <div class="comments-section">
+        <h2>Comments</h2>
+        {% for comment in product.comments %}
+            <div class="comment-card">
+                <strong>{{ comment.author.username }}</strong> 
+                <span>({{ comment.date_posted.strftime('%Y-%m-%d %H:%M') }})</span>
+                <p>{{ comment.content }}</p>
+            </div>
+        {% endfor %}
+
+        {% if current_user.is_authenticated %}
+        <h3>Leave a Comment</h3>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.content(rows=3, class="textarea-comment") }}
+            <button type="submit" class="btn-gradient">Post Comment</button>
+        </form>
+        {% else %}
+        <p><a href="{{ url_for('main.login') }}">Login</a> to post a comment.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
