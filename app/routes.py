@@ -5,6 +5,7 @@ from app import db
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import joinedload
+from flask import send_from_directory
 
 main = Blueprint('main', __name__)
 
@@ -304,6 +305,8 @@ def remove_order(order_id):
     flash(f"Order #{order.id} has been removed.", "success")
     return redirect(url_for('main.admin_dashboard'))
 
+# ลบโค้ดชุดเดิมที่ประกาศ route ซ้ำออกให้หมด แล้วใส่โค้ดนี้ลงไปแทนครับ
 @main.route('/google182eb51858f50114.html')
 def google_verification():
-    return main.send_static_file('google182eb51858f50114.html')
+    # ใช้ send_from_directory เพื่ออ่านไฟล์จากโฟลเดอร์ static
+    return send_from_directory('static', 'google182eb51858f50114.html')
